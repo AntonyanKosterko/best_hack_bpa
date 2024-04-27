@@ -171,4 +171,3 @@ class DataBaseManager:
                 delete_row_query += ';'
                 cursor.execute(delete_row_query)
                 connection.commit()
-

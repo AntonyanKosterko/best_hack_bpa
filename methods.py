@@ -3,7 +3,7 @@ import datetime
 from database_services import DataBaseManager
 import json
 from model.answer import get_cluster
-
+import ast
 def get_data():
     manager = DataBaseManager('Avito')
     categories = manager.get_original_items('requests', 'category')
@@ -27,24 +27,15 @@ def get_html_code():
 
     return string
 
-def str_to_dict(data_str):
-    data_str = data_str.strip("{}")
-    data_pairs = data_str.split(", ")
-    data_dict = {}
 
-    for pair in data_pairs:
-        key, value = pair.split(": ")
-        key = key.strip("''").strip('""')
-        value = value.strip("''").strip('""')
-        if value == 'True':
-            value = True
-        elif value == 'False':
-            value = False
-        elif value == 'None':
-            value = None
-        data_dict[key] = value
+def str_to_dict(input_string):
+    # Удаление пробелов в начале и конце строки, если они есть
+    input_string = input_string.strip()
 
-    return data_dict
+    # Парсинг строки в словарь
+    result_dict = ast.literal_eval(input_string)
+
+    return result_dict
 
 def load_database_from_json():
     filename = 'dataset_hack.json'
@@ -68,7 +59,7 @@ def load_database_from_json():
                 pass
         category = get_cluster(text)
         if id:
-            manager.add_row('requests', [category, str(id), text, time, '', '', ''])
+            manager.add_row('requests', [str(category[0]), str(id), text, time, '', '', ''])
     print(manager.get_full_table('requests'))
 
 def get_closed_req():
@@ -79,6 +70,4 @@ def get_closed_req():
         if a[6]:
             result.append(a)
     return result
-
-load_database_from_json()
 

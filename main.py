@@ -3,7 +3,7 @@ import datetime
 from flask import Flask, request, render_template_string, redirect, url_for
 from database_services import DataBaseManager
 import methods
-
+from model.answer import get_cluster
 app = Flask(__name__)
 
 CSS_STYLE = """
@@ -141,12 +141,12 @@ def data_input():
         # Получение данных из полей формы
         user_id = request.form.get('user_id')
         text_of_request = request.form.get('text_of_request')
-
-        category = '2'
+        time = str(datetime.datetime.now()).replace('-', ' ').replace(':', ' ').replace(':', ' ').replace('.', ' ')
+        category = get_cluster(text_of_request)
         manager = DataBaseManager('Avito')
-        manager.add_row('requests', [category, user_id, text_of_request])
+        manager.add_row('requests', [str(category[0]), str(user_id), text_of_request, time, '', '', ''])
 
-        message = 'Обращению присвоена категория: ' + category
+        message = 'Обращению присвоена категория: ' + str(category[0])
     js_message = repr(message) if message else 'null'
 
     HTML_TEMPLATE = """
@@ -285,4 +285,12 @@ def data_view():
     return render_template_string(HTML_TEMPLATE, arrays=arrays, array_choice=array_choice)
 
 if __name__ == '__main__':
+    try:
+        manager = DataBaseManager('Avito')
+        manager.create_table('requests', ['category', 'user_id', 'text_of_request', 'creating_time', 'is_being_handled',
+                                          'handled_time', 'close_time'],
+                             ['text', 'text', 'text', 'text', 'text', 'text', 'text', ])
+    except:
+        pass
+    methods.load_database_from_json()
     app.run(debug=True)
