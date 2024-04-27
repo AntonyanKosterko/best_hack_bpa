@@ -1,5 +1,7 @@
-from database_services import DataBaseManager
+import datetime
 
+from database_services import DataBaseManager
+import json
 
 def get_data():
     manager = DataBaseManager('Avito')
@@ -42,3 +44,29 @@ def str_to_dict(data_str):
         data_dict[key] = value
 
     return data_dict
+
+def load_database_from_json():
+    filename = 'dataset_hack.json'
+    array_of_dicts = []
+
+    with open(filename, 'r', encoding='utf-8') as file:
+        array_of_dicts = json.load(file)
+
+    time = str(datetime.datetime.now()).replace('-', ' ').replace(':', ' ').replace(':', ' ').replace('.', ' ')
+    manager = DataBaseManager('Avito')
+    manager.clear_table('requests') ### УДАЛИТЬ ПОТОМ НАДО
+    for row in array_of_dicts[:100]:
+        text = row['message']
+        arr = text.split()
+        id = 0
+        for word in arr:
+            try:
+                id = int(word)
+                break
+            except:
+                pass
+        category = '1' ### ДОБАВИТЬ МОДЕЛЬ
+        if id:
+            manager.add_row('requests', [category, str(id), text, time, '', '', ''])
+    print(manager.get_full_table('requests'))
+

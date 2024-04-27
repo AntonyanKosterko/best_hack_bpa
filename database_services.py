@@ -172,22 +172,3 @@ class DataBaseManager:
                 cursor.execute(delete_row_query)
                 connection.commit()
 
-
-manager = DataBaseManager('Avito')
-#manager.drop_table('requests')
-print(manager.get_full_table('requests'))
-#manager.create_table('requests', ['category', 'user_id', 'text_of_request', 'creating_time', 'is_being_handled', 'handled_time', 'close_time'], ['text', 'text', 'text', 'text', 'text', 'text', 'text'])
-'''
-manager.clear_table('requests')
-manager.add_row('requests', ['1', '1', 'hjfdhfjdhf', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['1', '12', 'gfdgfdfg', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['1', '123', 'sdff', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['2', '3', 'gff', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['2', '32', 'hggsseeq', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['2', '321', 'das', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['3', '35', 'fdfgjkdskl', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['3', '35322', 'hggsskjhhjhjeeq', '2024 4 27 18 12 24 714911', '', '', ''])
-manager.add_row('requests', ['3', '32541', 'daddfgdfgdfgs', '2024 4 27 18 12 24 714911', '', '', ''])
-print(manager.get_struct('requests'))
-print(manager.get_full_table('requests'))
-'''
