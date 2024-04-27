@@ -78,6 +78,41 @@ form {
 .alert {
   color: #ff5722;
 }
+.card {
+  background-color: #25282c;
+  border: 1px solid #444;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+.card-header {
+  background-color: #33383d;
+  border-bottom: 1px solid #444;
+  padding: 0.75rem 1rem;
+  border-top-left-radius: calc(0.25rem - 1px);
+  border-top-right-radius: calc(0.25rem - 1px);
+  color: #aaa;
+  font-weight: bold;
+}
+.card-body {
+  padding: 1rem;
+}
+.card-body p {
+  margin: 0;
+  color: #ddd;
+}
+.delete-button {
+  background-color: #d9534f;
+  color: white;
+  padding: 0.2rem 0.6rem;
+  margin-left: 1rem;
+  border: none;
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
+.delete-button:hover {
+  background-color: #c9302c;
+}
 """
 
 MENU_TEMPLATE = """
@@ -154,7 +189,7 @@ def data_view():
       <meta charset="utf-8">
       <title>Массивы с элементами для удаления</title>
       <style>
-      {css}
+      {css}      
       </style>
     </head>
     <body>
@@ -168,20 +203,23 @@ def data_view():
       </form>
       <br>
       {% if arrays %}
-        <ul>
-          {% for item in arrays %}
-            <li>
-              {{ item }}
-              <!-- Кнопка удаления для каждого элемента -->
-              <form method="post" style="display: inline;">
-                <input type="hidden" name="delete" value="{{ item }}">
-                <input type="hidden" name="array_choice" value="{{ array_choice }}">
-                <input type="submit" value="Удалить">
-              </form>
-            </li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+    {% for item in arrays %}
+      <div class="card">
+        <div class="card-header">
+          Обращение #{{ loop.index }}
+        </div>
+        <div class="card-body">
+          <p><b>user_id:</b> {{ item.user_id }}<br>{{ item.text_of_request }}</p>
+          <!-- Форма удаления элемента -->
+          <form method="post" style="display: inline;">
+              <input type="hidden" name="delete" value="{{ item }}">
+              <input type="hidden" name="array_choice" value="{{ array_choice }}">
+              <button type="submit" class="delete-button">Удалить</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
     </body>
     </html>
     """
@@ -195,11 +233,10 @@ def data_view():
             array_choice = request.form.get('dropdown')
         elif 'delete' in request.form:
             to_delete = request.form.get('delete')
-            user_id = to_delete[len('user_id: '):to_delete.index('     requests text: ')]
-            text = to_delete[to_delete.index('requests text: ') + len('requests text: '):]
             manager = DataBaseManager('Avito')
-            manager.delete_rows('requests', {'user_id': user_id, 'text_of_request': text})
+            manager.delete_rows('requests', methods.str_to_dict(to_delete))
             data = methods.get_data()
+            array_choice = request.form.get('array_choice')
 
     arrays = data.get(array_choice, [])
     return render_template_string(HTML_TEMPLATE, arrays=arrays, array_choice=array_choice)

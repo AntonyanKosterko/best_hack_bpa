@@ -10,7 +10,7 @@ def get_data():
         data[f"category{i}"] = []
         rows = manager.get_rows('requests', {'category': category[0]})
         for row in rows:
-            data[f"category{i}"].append(f'user_id: {row[1]}     requests text: {row[2]}')
+            data[f"category{i}"].append({'user_id': row[1], 'text_of_request': row[2]})
     return data
 
 def get_html_code():
@@ -21,3 +21,13 @@ def get_html_code():
         string += f'\n<option value="category{i}">{category[0]}</option>'
 
     return string
+
+def str_to_dict(s):
+    s = s.strip("'{ }").replace("': '", '": "').replace("', '", '", "')
+    pairs = s.split('", "')
+    dictionary = {}
+    for pair in pairs:
+        key, value = pair.split('": "')
+        dictionary[key] = value.strip('"')
+
+    return dictionary
