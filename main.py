@@ -120,10 +120,10 @@ form {
 MENU_TEMPLATE = """
 <nav style="position: fixed; top: 10px; right: 10px;">
     <form action="{{url_for('data_input')}}" method="get">
-        <button type="submit">Ввод данных</button>
+        <button type="submit">Создать обращение</button>
     </form>
     <form action="{{url_for('data_view')}}" method="get">
-        <button type="submit">Просмотр данных</button>
+        <button type="submit">Просмотр обращений</button>
     </form>
 </nav>
 """
