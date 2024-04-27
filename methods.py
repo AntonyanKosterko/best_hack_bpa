@@ -10,7 +10,9 @@ def get_data():
         data[f"category{i}"] = []
         rows = manager.get_rows('requests', {'category': category[0]})
         for row in rows:
-            data[f"category{i}"].append({'user_id': row[1], 'text_of_request': row[2]})
+            data[f"category{i}"].append({'category': row[0], 'user_id': row[1], 'text_of_request': row[2],
+                                         'creating_time': row[3], 'is_being_handled': row[4], 'handled_time': row[5],
+                                         'close_time': row[6]})
     return data
 
 def get_html_code():
@@ -22,12 +24,21 @@ def get_html_code():
 
     return string
 
-def str_to_dict(s):
-    s = s.strip("'{ }").replace("': '", '": "').replace("', '", '", "')
-    pairs = s.split('", "')
-    dictionary = {}
-    for pair in pairs:
-        key, value = pair.split('": "')
-        dictionary[key] = value.strip('"')
+def str_to_dict(data_str):
+    data_str = data_str.strip("{}")
+    data_pairs = data_str.split(", ")
+    data_dict = {}
 
-    return dictionary
+    for pair in data_pairs:
+        key, value = pair.split(": ")
+        key = key.strip("''").strip('""')
+        value = value.strip("''").strip('""')
+        if value == 'True':
+            value = True
+        elif value == 'False':
+            value = False
+        elif value == 'None':
+            value = None
+        data_dict[key] = value
+
+    return data_dict

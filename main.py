@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask, request, render_template_string, redirect, url_for
 from database_services import DataBaseManager
 import methods
@@ -105,8 +107,8 @@ form {
   background-color: #d9534f;
   color: white;
   padding: 0.2rem 0.6rem;
-  margin-left: 1rem;
   border: none;
+  margin-left: 1rem;
   border-radius: 0.2rem;
   cursor: pointer;
 }
@@ -202,24 +204,37 @@ def data_view():
         <input type="submit" name="search" value="Поиск">
       </form>
       <br>
-      {% if arrays %}
-    {% for item in arrays %}
-      <div class="card">
-        <div class="card-header">
-          Обращение #{{ loop.index }}
-        </div>
-        <div class="card-body">
-          <p><b>user_id:</b> {{ item.user_id }}<br>{{ item.text_of_request }}</p>
+      {% for item in arrays %}
+      {% if not item.close_time %}
+    <div class="card">
+      <div class="card-header">
+        Обращение #{{ loop.index }}
+      </div>
+      <div class="card-body">
+        <p><b>user_id:</b> {{ item.user_id }}<br>{{ item.text_of_request }}</p>
+        {% if item.is_being_handled %}
+          <span class="handled-badge">Обращение в обработке</span>
           <!-- Форма удаления элемента -->
-          <form method="post" style="display: inline;">
+        <form method="post" style="display: inline;">
               <input type="hidden" name="delete" value="{{ item }}">
               <input type="hidden" name="array_choice" value="{{ array_choice }}">
-              <button type="submit" class="delete-button">Удалить</button>
+              <button type="submit" class="delete-button">Закрыть</button>
+        </form>
+        {% endif %}
+        <!-- Форма отметки обработки элемента -->
+        {% if not item.is_being_handled %}
+          <form method="post" style="display: inline;">
+              <input type="hidden" name="mark" value="{{ item }}">
+              <input type="hidden" name="array_choice" value="{{ array_choice }}">
+              <button type="submit" class="mark-button">Отметить</button>
           </form>
-        </div>
+        {% endif %}
+        
+        
       </div>
-    {% endfor %}
-  {% endif %}
+    </div>
+    {% endif %}
+  {% endfor %}
     </body>
     </html>
     """
@@ -234,7 +249,35 @@ def data_view():
         elif 'delete' in request.form:
             to_delete = request.form.get('delete')
             manager = DataBaseManager('Avito')
+            delete_dict = methods.str_to_dict(to_delete)
             manager.delete_rows('requests', methods.str_to_dict(to_delete))
+            delete_dict['close_time'] = str(datetime.datetime.now()).replace('-', ' ').replace(':', ' ').replace(':',
+                                                                                                                 ' ').replace('.', ' ')
+            if delete_dict['is_being_handled'] != '1':
+                delete_dict['handled_time'] = str(datetime.datetime.now()).replace('-', ' ').replace(':', ' ').replace(':',
+                                                                                                                 ' ').replace('.', ' ')
+                delete_dict['is_being_handled'] = '1'
+            delete_arr = []
+            for v in delete_dict.values():
+                delete_arr.append(v)
+            manager.add_row('requests', delete_arr)
+
+            manager.delete_rows('requests', methods.str_to_dict(to_delete))
+            data = methods.get_data()
+            array_choice = request.form.get('array_choice')
+        elif 'mark' in request.form:
+            to_mark = request.form.get('mark')
+            manager = DataBaseManager('Avito')
+            mark_dict = methods.str_to_dict(to_mark)
+            manager.delete_rows('requests', methods.str_to_dict(to_mark))
+            mark_dict['is_being_handled'] = '1'
+            mark_dict['handled_time'] = str(datetime.datetime.now()).replace('-', ' ').replace(':', ' ').replace(':', ' ').replace('.', ' ')
+            mark_arr = []
+            for v in mark_dict.values():
+                mark_arr.append(v)
+
+            manager.add_row('requests', mark_arr)
+
             data = methods.get_data()
             array_choice = request.form.get('array_choice')
 
