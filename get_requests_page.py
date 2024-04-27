@@ -6,7 +6,6 @@ app = Flask(__name__)
 
 data = methods.get_data()
 
-# HTML шаблон со списком и кнопками удаления
 HTML_TEMPLATE = """
 <!doctype html>
 <html lang="en">

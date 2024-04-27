@@ -5,6 +5,7 @@ def get_data():
     manager = DataBaseManager('Avito')
     categories = manager.get_original_items('requests', 'category')
     data = {}
+    data['none'] = []
     for i, category in enumerate(categories):
         data[f"category{i}"] = []
         rows = manager.get_rows('requests', {'category': category[0]})
