@@ -1,0 +1,9 @@
+Flask
+psycopg2
+pandas
+numpy
+sentence_transformers
+nltk
+subprocess
+sklearn
+matplotlib
