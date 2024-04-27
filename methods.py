@@ -2,6 +2,7 @@ import datetime
 
 from database_services import DataBaseManager
 import json
+from model.answer import get_cluster
 
 def get_data():
     manager = DataBaseManager('Avito')
@@ -65,8 +66,19 @@ def load_database_from_json():
                 break
             except:
                 pass
-        category = '1' ### ДОБАВИТЬ МОДЕЛЬ
+        category = get_cluster(text)
         if id:
             manager.add_row('requests', [category, str(id), text, time, '', '', ''])
     print(manager.get_full_table('requests'))
+
+def get_closed_req():
+    manager = DataBaseManager('Avito')
+    arr = manager.get_full_table('requests')
+    result = []
+    for a in arr:
+        if a[6]:
+            result.append(a)
+    return result
+
+load_database_from_json()
 

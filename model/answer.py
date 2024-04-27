@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-
-import pandas as pd
+import numpy as np
 from sentence_transformers import SentenceTransformer
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import joblib
-
-model = joblib.load('kmeans_model.pkl')
+model = joblib.load('model/kmeans_model.pkl')
 
 # Предварительная обработка текстов
 nltk.download('punkt')
@@ -34,7 +32,7 @@ transformer = SentenceTransformer('distilbert-base-nli-mean-tokens')
 
 def get_cluster(text):
     prep_text = preprocess_text(text)
-    embs = transformer.encode(prep_text)
+    embs = transformer.encode([prep_text])
     cluster = model.predict(embs)
     return cluster
 
