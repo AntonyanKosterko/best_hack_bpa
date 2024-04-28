@@ -191,14 +191,14 @@ def data_view():
     <html lang="en">
     <head>
       <meta charset="utf-8">
-      <title>Массивы с элементами для удаления</title>
+      <title>Просмотр обращений</title>
       <style>
       {css}      
       </style>
     </head>
     <body>
     {menu}
-      <h1>Выберите массив и нажмите 'Поиск'</h1>
+      <h1>Выберите категорию и нажмите 'Поиск'</h1>
       <form method="post">
         <select name="dropdown">
         <option value="none">Не выбрано</option>""".format(menu=MENU_TEMPLATE, css=CSS_STYLE) + methods.get_html_code() + """
