@@ -48,7 +48,7 @@ def load_database_from_json():
     time = str(datetime.datetime.now()).replace('-', ' ').replace(':', ' ').replace(':', ' ').replace('.', ' ')
     manager = DataBaseManager('Avito')
     manager.clear_table('requests')
-    for row in array_of_dicts[:100]:
+    for row in array_of_dicts[:200]:
         text = row['message']
         arr = text.split()
         id = 0
