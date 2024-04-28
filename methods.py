@@ -106,4 +106,3 @@ def print_statistics():
     print('количество обращений, которые были закрыты', count_of_closed)
     print('среднее время обработки обращения', sum_of_closed / count_of_closed)
 
-print_statistics()
