@@ -3,6 +3,8 @@ from database_services import DataBaseManager
 import json
 from model.answer import get_cluster
 import ast
+import nltk
+
 def get_data():
     manager = DataBaseManager('Avito')
     categories = manager.get_original_items('requests', 'category')
@@ -74,5 +76,9 @@ def start_work():
     manager.create_table('requests', ['category', 'user_id', 'text_of_request', 'creating_time', 'is_being_handled',
                                       'handled_time', 'close_time'],
                          ['text', 'text', 'text', 'text', 'text', 'text', 'text', ])
+    # Предварительно загрузка необходимых ресурсов NLTK
+    nltk.download('punkt', quiet=True)
+    nltk.download('stopwords', quiet=True)
+    nltk.download('wordnet', quiet=True)
     load_database_from_json()
 

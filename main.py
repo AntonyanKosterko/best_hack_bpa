@@ -8,11 +8,6 @@ import joblib
 from model.answer import get_cluster
 app = Flask(__name__)
 
-# Предварительная обработка текстов
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-
 CSS_STYLE = """
 /* Общие стили */
 body {

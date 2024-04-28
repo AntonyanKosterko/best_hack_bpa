@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from sentence_transformers import SentenceTransformer
 import nltk
+from sentence_transformers import SentenceTransformer
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import joblib
+
+
 
 model = joblib.load('model/kmeans_model.pkl')
 

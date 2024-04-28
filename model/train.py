@@ -23,11 +23,6 @@ except:
     nltk.data.path.append('')
 '''
 
-# Предварительная обработка текстов
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-
 stop_words = set(stopwords.words('russian'))
 lemmatizer = WordNetLemmatizer()
 
