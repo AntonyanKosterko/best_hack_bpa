@@ -81,3 +81,29 @@ def start_work():
     nltk.download('wordnet', quiet=True)
     load_database_from_json()
 
+
+def convert_to_datetime(date_string):
+    date_format = "%Y %m %d %H %M %S %f"
+    return datetime.datetime.strptime(date_string, date_format)
+
+def print_statistics():
+    manager = DataBaseManager('Avito')
+    table = manager.get_full_table('requests')
+    count_of_hangled = 0
+    count_of_closed = 0
+    sum_of_hangled = 0
+    sum_of_closed = 0
+    for row in table:
+        if row[5]:
+            count_of_hangled += 1
+            sum_of_closed += (convert_to_datetime(row[5]) - convert_to_datetime(row[3])).seconds
+        if row[6]:
+            count_of_closed += 1
+            sum_of_hangled += (convert_to_datetime(row[6]) - convert_to_datetime(row[5])).seconds
+
+    print('количество обращений, которые были в обработке', count_of_hangled)
+    print('среднее время, перед тем, как обращение было принято в обработку ', sum_of_hangled / count_of_hangled)
+    print('количество обращений, которые были закрыты', count_of_closed)
+    print('среднее время обработки обращения', sum_of_closed / count_of_closed)
+
+print_statistics()
