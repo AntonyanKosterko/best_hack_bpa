@@ -3,8 +3,15 @@ import datetime
 from flask import Flask, request, render_template_string, redirect, url_for
 from database_services import DataBaseManager
 import methods
+import nltk
+import joblib
 from model.answer import get_cluster
 app = Flask(__name__)
+
+# Предварительная обработка текстов
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 CSS_STYLE = """
 /* Общие стили */

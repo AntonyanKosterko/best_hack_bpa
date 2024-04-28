@@ -6,12 +6,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import joblib
-model = joblib.load('model/kmeans_model.pkl')
 
-# Предварительная обработка текстов
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+model = joblib.load('model/kmeans_model.pkl')
 
 stop_words = set(stopwords.words('russian'))
 lemmatizer = WordNetLemmatizer()
