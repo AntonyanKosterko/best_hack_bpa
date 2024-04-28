@@ -1,5 +1,4 @@
 import datetime
-
 from database_services import DataBaseManager
 import json
 from model.answer import get_cluster
@@ -46,7 +45,7 @@ def load_database_from_json():
 
     time = str(datetime.datetime.now()).replace('-', ' ').replace(':', ' ').replace(':', ' ').replace('.', ' ')
     manager = DataBaseManager('Avito')
-    manager.clear_table('requests') ### УДАЛИТЬ ПОТОМ НАДО
+    manager.clear_table('requests')
     for row in array_of_dicts[:100]:
         text = row['message']
         arr = text.split()
@@ -60,7 +59,6 @@ def load_database_from_json():
         category = get_cluster(text)
         if id:
             manager.add_row('requests', [str(category[0]), str(id), text, time, '', '', ''])
-    print(manager.get_full_table('requests'))
 
 def get_closed_req():
     manager = DataBaseManager('Avito')
@@ -70,4 +68,11 @@ def get_closed_req():
         if a[6]:
             result.append(a)
     return result
+
+def start_work():
+    manager = DataBaseManager('Avito')
+    manager.create_table('requests', ['category', 'user_id', 'text_of_request', 'creating_time', 'is_being_handled',
+                                      'handled_time', 'close_time'],
+                         ['text', 'text', 'text', 'text', 'text', 'text', 'text', ])
+    load_database_from_json()
 

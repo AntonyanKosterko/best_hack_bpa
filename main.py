@@ -286,11 +286,7 @@ def data_view():
 
 if __name__ == '__main__':
     try:
-        manager = DataBaseManager('Avito')
-        manager.create_table('requests', ['category', 'user_id', 'text_of_request', 'creating_time', 'is_being_handled',
-                                          'handled_time', 'close_time'],
-                             ['text', 'text', 'text', 'text', 'text', 'text', 'text', ])
+        methods.start_work()
     except:
         pass
-    methods.load_database_from_json()
     app.run(debug=True)
